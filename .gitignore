@@ -1,0 +1,13 @@
+# System
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Secrets / env
+.env
+.env.*
+
+# Obsidian (volatile workspace state)
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
