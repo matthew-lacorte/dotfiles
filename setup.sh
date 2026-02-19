@@ -37,6 +37,8 @@ fi
 # -----------------------------------------------------------
 # 4. Create/update per-project venvs
 # -----------------------------------------------------------
+mkdir -p ~/dev/dotfiles/local
+
 mkdir -p "$VENVS_DIR"
 
 setup_venv() {
