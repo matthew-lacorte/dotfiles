@@ -79,3 +79,12 @@ export DBT_PASSWORD="..."
 export DBT_DATABASE="analytics"
 export DBT_TARGET="dev"
 ```
+
+## GEF Coexistence
+
+This repo shares a machine with the GEF research environment (`~/dev/gef/ops/`). They're mostly isolated but a few things to be aware of:
+
+- **Python runtimes differ.** Dotfiles uses Python 3.12 via `uv`; GEF ops uses Python 3.11 via `conda`. The venvs live in separate locations (`~/.venvs/` vs `ops/envs/gef/`) so they don't collide, but don't assume the Python version matches across contexts.
+- **Don't mix conda and uv venvs in one shell.** If you've sourced `ops/_active/activate.sh` (conda), deactivate it (`conda deactivate`) before using `dbt-wh` or `dbt-marts`. Otherwise conda's PATH entries sit ahead of the uv venv and you'll get the wrong Python.
+- **Env var bleed.** GEF's `activate.sh` exports research-specific vars (`SUPABASE_URL`, `ANTHROPIC_API_KEY`, `LITELLM_*`, etc.) into the shell. No overlap with dbt vars today, but if you source both in one session, the extra vars are floating around. Harmless unless something starts reading them unexpectedly.
+- **Git hooks are repo-scoped.** GEF sets `core.hooksPath` inside its own repo — won't affect dotfiles or any other repo.
