@@ -11,3 +11,9 @@
 # Obsidian (volatile workspace state)
 **/.obsidian/workspace.json
 **/.obsidian/workspace-mobile.json
+
+# Virtual environments
+.venvs/
+
+# Local overrides (machine-specific, never committed)
+local/

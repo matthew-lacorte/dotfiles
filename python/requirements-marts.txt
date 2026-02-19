@@ -1,0 +1,4 @@
+dbt-core==1.11.6
+dbt-redshift==1.10.1
+sqlfluff
+sqlfluff-templater-dbt

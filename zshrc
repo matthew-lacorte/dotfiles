@@ -112,6 +112,21 @@ source $ZSH/oh-my-zsh.sh
 alias gef="cd ~/dev/gef && code ."
 alias dev="cd ~/dev"
 
+# Python / dbt environment
+alias dbt-wh='source ~/.venvs/gpn-dbt-warehouse/bin/activate && cd ~/dev/gpn-dbt-warehouse'
+alias dbt-marts='source ~/.venvs/gpn-marts-base/bin/activate && cd ~/dev/gpn-marts-base'
+
+# Run dbt in a warehouse source sub-project
+# Usage: dbt-source auth run
+dbt-source() {
+    local src="$1"; shift
+    if [ -z "$src" ]; then
+        echo "Usage: dbt-source <source> <dbt-cmd> [args...]"
+        ls ~/dev/gpn-dbt-warehouse/sources/
+        return 1
+    fi
+    (cd "$HOME/dev/gpn-dbt-warehouse/sources/$src" && dbt "$@")
+}
 
 source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 
@@ -120,3 +135,6 @@ source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Local overrides (gitignored — for private aliases, env vars, work secrets)
+[[ -f ~/dev/dotfiles/local/zshrc ]] && source ~/dev/dotfiles/local/zshrc

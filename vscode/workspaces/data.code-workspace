@@ -1,0 +1,59 @@
+{
+	"folders": [
+		{
+			"path": "../..",
+			"name": "dotfiles"
+		},
+		{
+			"path": "../../../gpn-dbt-warehouse",
+			"name": "gpn-dbt-warehouse"
+		},
+		{
+			"path": "../../../gpn-marts-base",
+			"name": "gpn-marts-base"
+		}
+	],
+	"settings": {
+		"python.defaultInterpreterPath": "~/.venvs/gpn-dbt-warehouse/bin/python",
+
+		"[sql]": {
+			"editor.defaultFormatter": "dorzey.vscode-sqlfluff",
+			"editor.formatOnSave": false,
+			"editor.tabSize": 4
+		},
+		"[jinja-sql]": {
+			"editor.defaultFormatter": "dorzey.vscode-sqlfluff",
+			"editor.formatOnSave": false,
+			"editor.tabSize": 4
+		},
+		"[yaml]": {
+			"editor.tabSize": 2
+		},
+		"[python]": {
+			"editor.tabSize": 4,
+			"editor.formatOnSave": true
+		},
+
+		"sqlfluff.linter.run": "onSave",
+		"sqlfluff.dialect": "redshift",
+
+		"files.exclude": {
+			"**/.DS_Store": true,
+			"**/target": true,
+			"**/dbt_packages": true,
+			"**/logs": true
+		},
+		"files.associations": {
+			"*.sql": "jinja-sql"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"innoverio.vscode-dbt-power-user",
+			"ms-python.python",
+			"dorzey.vscode-sqlfluff",
+			"redhat.vscode-yaml",
+			"samuelcolvin.jinjahtml"
+		]
+	}
+}
