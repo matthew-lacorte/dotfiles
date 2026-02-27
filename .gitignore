@@ -17,3 +17,6 @@
 
 # Local overrides (machine-specific, never committed)
 local/
+
+# TEMP fix until permissions GRANT
+dbt_internal_packages/
