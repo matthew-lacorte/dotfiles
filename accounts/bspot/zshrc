@@ -1,0 +1,18 @@
+# B Spot — dbt environment aliases
+
+alias gef="cd ~/dev/gef && code ."
+
+alias dbt-wh='source ~/.venvs/gpn-dbt-warehouse/bin/activate && cd ~/dev/gpn-dbt-warehouse'
+alias dbt-marts='source ~/.venvs/gpn-marts-base/bin/activate && cd ~/dev/gpn-marts-base'
+
+# Run dbt in a warehouse source sub-project
+# Usage: dbt-source auth run
+dbt-source() {
+    local src="$1"; shift
+    if [ -z "$src" ]; then
+        echo "Usage: dbt-source <source> <dbt-cmd> [args...]"
+        ls ~/dev/gpn-dbt-warehouse/sources/
+        return 1
+    fi
+    (cd "$HOME/dev/gpn-dbt-warehouse/sources/$src" && dbt "$@")
+}

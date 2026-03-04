@@ -1,78 +1,113 @@
 # dotfiles
 
-Personal dotfiles for shell config, editor setup, and Python/dbt environment management.
+Personal dotfiles for shell config, editor setup, and environment management across multiple accounts.
 
 ## Quick Start
 
 ```bash
 git clone https://github.com/matthew-lacorte/dotfiles.git ~/dev/dotfiles
 cd ~/dev/dotfiles
-./setup.sh
+
+# Set your profile in local/zshrc (created automatically)
+mkdir -p local
+echo 'export DOTFILES_PROFILE="bspot"' >> local/zshrc
+
+# Run setup (shared + account-specific)
+./setup.sh bspot
 source ~/.zshrc
 ```
 
-`setup.sh` is idempotent — safe to re-run anytime (e.g. after editing requirements).
+`setup.sh` is idempotent — safe to re-run anytime.
 
-## What's Here
+## Structure
 
 ```
 dotfiles/
-├── zshrc                    # Oh My Zsh + Powerlevel10k + project aliases
-├── Brewfile                 # Homebrew dependencies (uv)
-├── setup.sh                 # Idempotent setup: brew, Python 3.12, venvs, symlinks
-├── python/
-│   ├── requirements-warehouse.txt   # dbt-core 1.10.19, dbt-redshift, dbt-metricflow
-│   └── requirements-marts.txt       # dbt-core 1.11.6, dbt-redshift, sqlfluff
-├── vscode/
-│   └── workspaces/
-│       └── data.code-workspace      # Multi-root workspace with editor + extension settings
-└── local/                   # (gitignored) Machine-specific overrides
+├── zshrc                        # Shared: Oh My Zsh, Powerlevel10k, profile loader
+├── setup.sh                     # Shared: brew, Python 3.12, symlinks + delegates to profile
+├── Brewfile                     # Shared Homebrew dependencies
+├── gitignore_global             # Global git ignore rules
+├── scripts/                     # Shared utility scripts (added to PATH)
+├── accounts/
+│   └── bspot/                   # Account-specific config
+│       ├── zshrc                # bspot aliases (dbt-wh, dbt-marts, etc.)
+│       ├── setup.sh             # bspot venv creation
+│       ├── python/              # Python requirements per project
+│       ├── scripts/             # bspot-specific scripts (added to PATH)
+│       ├── stray_notes/         # Documentation / notes
+│       └── vscode/workspaces/   # VSCode workspace files
+├── vscode/                      # Shared VSCode config (if any)
+└── local/                       # (gitignored) Machine-specific: secrets, DOTFILES_PROFILE
+```
+
+## Profiles
+
+Each machine sets `DOTFILES_PROFILE` in `local/zshrc`. The profile controls which account's zshrc, setup script, and scripts directory are loaded.
+
+```bash
+# local/zshrc (never committed)
+export DOTFILES_PROFILE="bspot"
+export DBT_HOST="your-cluster.amazonaws.com"
+# ... other secrets
+```
+
+Running setup without a profile runs only shared setup (brew, Python, symlinks):
+
+```bash
+./setup.sh              # shared only
+./setup.sh bspot        # shared + bspot account
 ```
 
 ## Shell Aliases
+
+**Shared** (always available):
+
+| Alias | What it does |
+|-------|-------------|
+| `dev` | `cd ~/dev` |
+
+**bspot profile**:
 
 | Alias | What it does |
 |-------|-------------|
 | `dbt-wh` | Activate warehouse venv + `cd` to project |
 | `dbt-marts` | Activate marts venv + `cd` to project |
-| `dbt-source <name> <cmd>` | Run a dbt command in a warehouse source sub-project (e.g. `dbt-source auth run`) |
-| `dev` | `cd ~/dev` |
+| `dbt-source <name> <cmd>` | Run dbt in a warehouse source sub-project |
+| `gef` | `cd ~/dev/gef && code .` |
 
-## Python Environments
+## Scripts
 
-Virtual environments live at `~/.venvs/` (outside all repos). Managed by [uv](https://docs.astral.sh/uv/).
+Utility scripts live in two places, both added to `PATH`:
+
+- `scripts/` — shared across all profiles
+- `accounts/<profile>/scripts/` — account-specific
+
+## Python Environments (bspot)
+
+Virtual environments live at `~/.venvs/`. Managed by [uv](https://docs.astral.sh/uv/).
 
 | Venv | Python | dbt-core | Key extras |
 |------|--------|----------|------------|
 | `gpn-dbt-warehouse` | 3.12 | 1.10.19 | dbt-metricflow 0.11.0 (semantic layer) |
-| `gpn-marts-base` | 3.12 | 1.11.6 | sqlfluff 4.0.4 |
+| `gpn-marts-base` | 3.12 | 1.11.6 | sqlfluff |
 
 To rebuild a venv from scratch:
 ```bash
 rm -rf ~/.venvs/gpn-dbt-warehouse
-./setup.sh
+./setup.sh bspot
 ```
 
-## VSCode
+## VSCode (bspot)
 
-Open the workspace: **File > Open Workspace from File > `~/dev/dotfiles/vscode/workspaces/data.code-workspace`**
-
-The workspace configures Python interpreters, jinja-sql file associations, sqlfluff linting, and recommends extensions (dbt Power User, Python, sqlfluff, YAML, Jinja).
-
-For per-folder interpreter selection: click the Python version in the bottom status bar and pick the right venv for whichever folder you're working in.
+Open the workspace: **File > Open Workspace from File > `~/dev/dotfiles/accounts/bspot/vscode/workspaces/data.code-workspace`**
 
 ## Local Overrides
 
-The `local/` directory is gitignored. Use it for anything private:
-
-```bash
-mkdir -p ~/dev/dotfiles/local
-```
-
-Put a `local/zshrc` file there for private aliases, env vars, or work credentials — it gets sourced automatically at the end of your shell init:
+The `local/` directory is gitignored. It holds `DOTFILES_PROFILE`, secrets, and any machine-specific config:
 
 ```bash
 # local/zshrc (example — never committed)
+export DOTFILES_PROFILE="bspot"
 export DBT_HOST="your-redshift-cluster.amazonaws.com"
 export DBT_USER="mlacorte"
 export DBT_PASSWORD="..."
@@ -84,7 +119,7 @@ export DBT_TARGET="dev"
 
 This repo shares a machine with the GEF research environment (`~/dev/gef/ops/`). They're mostly isolated but a few things to be aware of:
 
-- **Python runtimes differ.** Dotfiles uses Python 3.12 via `uv`; GEF ops uses Python 3.11 via `conda`. The venvs live in separate locations (`~/.venvs/` vs `ops/envs/gef/`) so they don't collide, but don't assume the Python version matches across contexts.
-- **Don't mix conda and uv venvs in one shell.** If you've sourced `ops/_active/activate.sh` (conda), deactivate it (`conda deactivate`) before using `dbt-wh` or `dbt-marts`. Otherwise conda's PATH entries sit ahead of the uv venv and you'll get the wrong Python.
-- **Env var bleed.** GEF's `activate.sh` exports research-specific vars (`SUPABASE_URL`, `ANTHROPIC_API_KEY`, `LITELLM_*`, etc.) into the shell. No overlap with dbt vars today, but if you source both in one session, the extra vars are floating around. Harmless unless something starts reading them unexpectedly.
-- **Git hooks are repo-scoped.** GEF sets `core.hooksPath` inside its own repo — won't affect dotfiles or any other repo.
+- **Python runtimes differ.** Dotfiles uses Python 3.12 via `uv`; GEF ops uses Python 3.11 via `conda`. The venvs live in separate locations (`~/.venvs/` vs `ops/envs/gef/`) so they don't collide.
+- **Don't mix conda and uv venvs in one shell.** Deactivate conda before using `dbt-wh` or `dbt-marts`.
+- **Env var bleed.** GEF's `activate.sh` exports research-specific vars. No overlap with dbt vars today.
+- **Git hooks are repo-scoped.** GEF sets `core.hooksPath` inside its own repo — won't affect dotfiles.

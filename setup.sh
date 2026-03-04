@@ -3,8 +3,12 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 VENVS_DIR="$HOME/.venvs"
+PROFILE="${1:-${DOTFILES_PROFILE:-}}"
 
 echo "=== dotfiles setup ==="
+if [ -n "$PROFILE" ]; then
+    echo "    profile: $PROFILE"
+fi
 
 # -----------------------------------------------------------
 # 1. Homebrew dependencies
@@ -35,10 +39,13 @@ else
 fi
 
 # -----------------------------------------------------------
-# 4. Create/update per-project venvs
+# 4. Local overrides directory
 # -----------------------------------------------------------
-mkdir -p ~/dev/dotfiles/local
+mkdir -p "$DOTFILES_DIR/local"
 
+# -----------------------------------------------------------
+# 5. Shared setup_venv helper (used by account setup scripts)
+# -----------------------------------------------------------
 mkdir -p "$VENVS_DIR"
 
 setup_venv() {
@@ -59,23 +66,35 @@ setup_venv() {
     uv pip install --python "$venv_path/bin/python" --prerelease=allow -r "$requirements"
     echo "  Done."
 }
-
-setup_venv "gpn-dbt-warehouse" "$DOTFILES_DIR/python/requirements-warehouse.txt"
-setup_venv "gpn-marts-base"    "$DOTFILES_DIR/python/requirements-marts.txt"
+export -f setup_venv
+export VENVS_DIR
 
 # -----------------------------------------------------------
-# 5. Summary
+# 6. Account-specific setup
+# -----------------------------------------------------------
+if [ -n "$PROFILE" ]; then
+    ACCOUNT_SETUP="$DOTFILES_DIR/accounts/$PROFILE/setup.sh"
+    if [ -f "$ACCOUNT_SETUP" ]; then
+        echo ""
+        echo "--- Running $PROFILE account setup ---"
+        source "$ACCOUNT_SETUP"
+    else
+        echo ""
+        echo "WARNING: No setup script found at $ACCOUNT_SETUP"
+    fi
+else
+    echo ""
+    echo "No profile specified. Run with a profile to set up account-specific tools:"
+    echo "  ./setup.sh <profile>        (e.g. ./setup.sh bspot)"
+    echo ""
+    echo "Available profiles:"
+    for d in "$DOTFILES_DIR"/accounts/*/; do
+        [ -d "$d" ] && echo "  $(basename "$d")"
+    done
+fi
+
+# -----------------------------------------------------------
+# 7. Summary
 # -----------------------------------------------------------
 echo ""
 echo "=== Setup complete ==="
-echo ""
-echo "Virtual environments:"
-echo "  gpn-dbt-warehouse: $VENVS_DIR/gpn-dbt-warehouse"
-echo "  gpn-marts-base:    $VENVS_DIR/gpn-marts-base"
-echo ""
-echo "Shell aliases (restart your shell or 'source ~/.zshrc'):"
-echo "  dbt-wh     - activate warehouse venv + cd to project"
-echo "  dbt-marts  - activate marts venv + cd to project"
-echo ""
-echo "Don't forget to set your Redshift env vars:"
-echo "  DBT_HOST, DBT_USER, DBT_PASSWORD, DBT_DATABASE, DBT_TARGET"
