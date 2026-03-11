@@ -5,8 +5,11 @@
 			"name": "dotfiles"
 		},
 		{
-			"path": "../../../gpn-dbt-warehouse",
+			"path": "../../../../../dbt/gpn-dbt-warehouse",
 			"name": "gpn-dbt-warehouse"
+		},
+		{
+			"path": "../../../../../Github-Experimenting"
 		}
 	],
 	"settings": {

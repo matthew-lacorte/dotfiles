@@ -134,3 +134,9 @@ if [[ -n "$DOTFILES_PROFILE" ]]; then
 fi
 
 . "/Users/mlacorte/.deno/env"
+# Added by dbt Fusion extension (ensure dbt binary dir on PATH)
+if [[ ":$PATH:" != *":/Users/mlacorte/.local/bin:"* ]]; then
+  export PATH=/Users/mlacorte/.local/bin:"$PATH"
+fi
+# Added by dbt Fusion extension
+alias dbtf=/Users/mlacorte/.local/bin/dbt
