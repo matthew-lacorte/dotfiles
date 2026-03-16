@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../../gef"
+		},
+		{
+			"path": "../../../gef-prime"
+		},
+		{
+			"path": "../.."
+		},
+	],
+	"settings": {
+		"python.terminal.useEnvFile": false
+	}
+}
