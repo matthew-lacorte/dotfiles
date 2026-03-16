@@ -1,14 +1,15 @@
 {
 	"folders": [
 		{
-			"path": "../..",
-			"name": "dotfiles"
+			"name": "dotfiles",
+			"path": "../.."
 		},
 		{
-			"path": "../../../../../dbt/gpn-dbt-warehouse",
-			"name": "gpn-dbt-warehouse"
+			"name": "gpn-dbt-warehouse",
+			"path": "../../../../../dbt/gpn-dbt-warehouse"
 		},
 		{
+			"name": "Github-Experimenting",
 			"path": "../../../../../Github-Experimenting"
 		}
 	],
