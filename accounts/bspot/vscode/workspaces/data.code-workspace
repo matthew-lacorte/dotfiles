@@ -39,11 +39,7 @@
 		"sqlfluff.dialect": "redshift",
 
 		"files.exclude": {
-			"**/dbt_internal_packages": true, //  Temp fix until permissions GRANT
-			"**/.DS_Store": true,
-			"**/target": true,
-			"**/dbt_packages": true,
-			"**/logs": true
+			"**/.DS_Store": true
 		},
 		"files.associations": {
 			"*.sql": "jinja-sql"
