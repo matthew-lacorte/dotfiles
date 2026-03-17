@@ -42,7 +42,8 @@
 			"**/.DS_Store": true
 		},
 		"files.associations": {
-			"*.sql": "jinja-sql"
+			"*.sql": "jinja-sql",
+			"env": "shellscript"
 		}
 	},
 	"extensions": {
