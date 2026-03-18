@@ -34,7 +34,7 @@
 			"editor.formatOnSave": true
 		},
 
-		"sqlfluff.executablePath": "~/.venvs/gpn-marts-base/bin/sqlfluff",
+		"sqlfluff.executablePath": "/Users/mlacorte/.venvs/gpn-marts-base/bin/sqlfluff",
 		"sqlfluff.linter.run": "onSave",
 		"sqlfluff.dialect": "redshift",
 
