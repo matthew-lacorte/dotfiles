@@ -1,6 +1,9 @@
 {
 	"folders": [
 		{
+			"path": "../../../../../data_platform"
+		},
+		{
 			"name": "dotfiles",
 			"path": "../.."
 		},
@@ -11,6 +14,9 @@
 		{
 			"name": "Github-Experimenting",
 			"path": "../../../../../Github-Experimenting"
+		},
+		{
+			"path": "../../../../../dbt/gpn-marts-base"
 		}
 	],
 	"settings": {
