@@ -133,6 +133,9 @@ if [[ -n "$DOTFILES_PROFILE" ]]; then
     unset _dotfiles_acct
 fi
 
+# direnv — auto-loads .envrc when you cd into a project
+eval "$(direnv hook zsh)"
+
 . "/Users/mlacorte/.deno/env"
 # Added by dbt Fusion extension (ensure dbt binary dir on PATH)
 if [[ ":$PATH:" != *":/Users/mlacorte/.local/bin:"* ]]; then

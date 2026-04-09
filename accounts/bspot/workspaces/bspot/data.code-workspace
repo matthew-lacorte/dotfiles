@@ -5,20 +5,24 @@
 			"path": "../../../../../data_platform"
 		},
 		{
-			"name": "dotfiles",
-			"path": "../.."
-		},
-		{
 			"name": "gpn-dbt-warehouse",
 			"path": "../../../../../dbt/gpn-dbt-warehouse"
+		},
+		{
+			"name": "gpn-marts-base",
+			"path": "../../../../../dbt/gpn-marts-base"
 		},
 		{
 			"name": "Github-Experimenting",
 			"path": "../../../../../Github-Experimenting"
 		},
 		{
-			"name": "gpn-marts-base",
-			"path": "../../../../../dbt/gpn-marts-base"
+			"name": "hex-bspot",
+			"path": "../../../../../hex-bspot"
+		},
+		{
+			"name": "dotfiles",
+			"path": "../.."
 		}
 	],
 	"settings": {
