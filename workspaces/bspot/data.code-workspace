@@ -5,20 +5,16 @@
 			"path": "../../../data_platform"
 		},
 		{
-			"name": "gpn-dbt-warehouse",
-			"path": "../../../dbt/gpn-dbt-warehouse"
+			"name": "dbt",
+			"path": "../../../dbt"
 		},
 		{
-			"name": "gpn-marts-base",
-			"path": "../../../dbt/gpn-marts-base"
-		},
-		{
-			"name": "Github-Experimenting",
-			"path": "../../../Github-Experimenting"
+			"name": "dispatch-pd",
+			"path": "../../../tools/pipedream/dispatch-pd"
 		},
 		{
 			"name": "hex-bspot",
-			"path": "../../../hex-bspot"
+			"path": "../../../tools/hex-bspot"
 		},
 		{
 			"name": "dotfiles",
@@ -27,6 +23,7 @@
 	],
 	"settings": {
 		"python.defaultInterpreterPath": "${userHome}/.venvs/gpn-dbt-warehouse/bin/python",
+		"python.useEnvironmentsExtension": true,
 
 		"[sql]": {
 			"editor.defaultFormatter": "sqlfluff.vscode-sqlfluff",
