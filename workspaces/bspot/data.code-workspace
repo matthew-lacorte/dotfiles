@@ -17,6 +17,10 @@
 			"path": "../../../tools/hex-bspot"
 		},
 		{
+			"name": "common",
+			"path": "../../../gpn_datateam_common"
+		},
+		{
 			"name": "dotfiles",
 			"path": "../.."
 		}
