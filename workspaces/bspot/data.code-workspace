@@ -61,7 +61,10 @@
 			"ms-python.python",
 			"sqlfluff.vscode-sqlfluff",
 			"redhat.vscode-yaml",
-			"samuelcolvin.jinjahtml"
+			"samuelcolvin.jinjahtml",
+			"denoland.vscode-deno",
+			"supabase.supabase-js-vscode",
+			"tamasfe.even-better-toml"
 		]
 	}
 }
